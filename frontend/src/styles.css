@@ -2791,3 +2791,615 @@ a,
     align-self: start;
   }
 }
+
+/* =========================================================
+   DESIGN V2 - identite noir & or, execution moderne
+   Typographie d affichage, surfaces travaillees, et une
+   couche d animation discrete (entrees, survols, etats).
+   ========================================================= */
+
+:root {
+  --font-display: 'Sora', 'Montserrat', 'Segoe UI', system-ui, sans-serif;
+
+  /* courbes et durees partagees */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 0.18s;
+  --dur-mid: 0.32s;
+  --dur-slow: 0.7s;
+
+  /* profondeur */
+  --elev-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --elev-2: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+  --elev-3: 0 28px 60px -18px rgba(0, 0, 0, 0.85);
+  --glow-gold: 0 20px 50px -22px rgba(212, 175, 55, 0.55);
+  --glow-wa: 0 18px 40px -18px rgba(37, 211, 102, 0.6);
+
+  /* grain applique sur les grandes surfaces sombres */
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='0.26'/></svg>");
+}
+
+/* ------------------ typographie d affichage ------------------ */
+
+.hero h1,
+.section-head h2,
+.page-head h1,
+.cta-band h2,
+.card-title,
+.price-value,
+.stat strong,
+.hero-stats div strong,
+.phone-card strong,
+.detail-bar strong,
+.admin-header h1,
+.login-card h1,
+.modal-head h2,
+.feature h3,
+.brand-text strong,
+.price-row strong {
+  font-family: var(--font-display);
+  font-feature-settings: 'ss01' 1;
+}
+
+.hero h1 {
+  font-weight: 800;
+  letter-spacing: -0.005em;
+  line-height: 1;
+}
+
+.section-head h2,
+.page-head h1,
+.cta-band h2 {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.card-title {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.price-value,
+.stat strong,
+.hero-stats div strong,
+.phone-card strong,
+.detail-bar strong {
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  font-variant-numeric: tabular-nums;
+}
+
+.brand-text strong {
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.section-head .eyebrow {
+  display: inline-block;
+  position: relative;
+  padding-left: 26px;
+}
+
+.section-head .eyebrow::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 16px;
+  height: 1px;
+  background: var(--gold);
+}
+
+/* ------------------ surfaces ------------------ */
+
+.hero::after {
+  background:
+    var(--grain),
+    radial-gradient(circle at 22% 34%, rgba(212, 175, 55, 0.2), transparent 52%),
+    linear-gradient(to top, #000 4%, rgba(0, 0, 0, 0.3) 58%, rgba(0, 0, 0, 0.78) 100%);
+  background-blend-mode: overlay, normal, normal;
+}
+
+.hero-badge {
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+}
+
+.hero-badge::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.6);
+  animation: pulse-dot 2.4s var(--ease) infinite;
+  flex: 0 0 auto;
+}
+
+.divider {
+  transform-origin: center;
+}
+
+/* ------------------ boutons ------------------ */
+
+.btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-mid) var(--ease),
+    background var(--dur-mid) var(--ease),
+    color var(--dur-mid) var(--ease),
+    border-color var(--dur-mid) var(--ease);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.975);
+}
+
+.btn-gold {
+  box-shadow: var(--glow-gold);
+}
+
+.btn-whatsapp {
+  box-shadow: var(--glow-wa);
+}
+
+/* reflet qui balaie le bouton principal */
+.btn-gold::after,
+.btn-whatsapp::after {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: -140%;
+  width: 55%;
+  height: 140%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.42), transparent);
+  transform: skewX(-18deg);
+  pointer-events: none;
+  z-index: -1;
+}
+
+@media (hover: hover) {
+  .btn-gold:hover::after,
+  .btn-whatsapp:hover::after {
+    animation: sweep 0.75s var(--ease);
+  }
+
+  .btn-gold:hover {
+    box-shadow: 0 24px 55px -20px rgba(212, 175, 55, 0.75);
+  }
+}
+
+/* un balayage a l arrivee sur le CTA principal du hero */
+.hero-actions .btn-gold::after {
+  animation: sweep 1s var(--ease) 1.15s 1;
+}
+
+.chip {
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.chip:active {
+  transform: scale(0.96);
+}
+
+/* ------------------ navigation ------------------ */
+
+.navbar {
+  transition: box-shadow var(--dur-mid) var(--ease), background var(--dur-mid) var(--ease);
+}
+
+.navbar.scrolled {
+  background: rgba(0, 0, 0, 0.94);
+  box-shadow: 0 12px 34px -20px rgba(0, 0, 0, 0.9);
+}
+
+@media (min-width: 761px) {
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    bottom: 0;
+    height: 2px;
+    background: var(--gold-gradient);
+    border-radius: 2px;
+    transition: left var(--dur-mid) var(--ease-out), right var(--dur-mid) var(--ease-out);
+  }
+
+  .nav-links a:hover::after,
+  .nav-links a.active::after {
+    left: 0;
+    right: 0;
+  }
+}
+
+/* barre de progression de lecture */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 100;
+  background: var(--gold-gradient);
+  transform: scaleX(var(--p, 0));
+  transform-origin: 0 50%;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+/* ------------------ cartes vehicules ------------------ */
+
+.card {
+  position: relative;
+  background: linear-gradient(180deg, #131313 0%, #090909 100%);
+  box-shadow: var(--elev-1);
+  transition:
+    transform var(--dur-mid) var(--ease-out),
+    border-color var(--dur-mid) var(--ease),
+    box-shadow var(--dur-mid) var(--ease);
+}
+
+/* liseré doré qui apparait au survol, sans decaler la mise en page */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--gold-gradient);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity var(--dur-mid) var(--ease);
+  pointer-events: none;
+  z-index: 4;
+}
+
+@media (hover: hover) {
+  .card:hover {
+    box-shadow: var(--elev-3);
+  }
+
+  .card:hover::before {
+    opacity: 0.9;
+  }
+}
+
+.card-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent 45%);
+  pointer-events: none;
+}
+
+.card-media img {
+  transition: transform 0.7s var(--ease-out);
+}
+
+.badge {
+  box-shadow: var(--elev-1);
+}
+
+.price-unit,
+.card-brand {
+  transition: color var(--dur-mid) var(--ease);
+}
+
+/* ------------------ atouts / panneaux ------------------ */
+
+.feature,
+.panel,
+.stat,
+.phone-card {
+  position: relative;
+  background: linear-gradient(180deg, #131313 0%, #0d0d0d 100%);
+}
+
+.feature .icon {
+  transition: transform var(--dur-mid) var(--ease-out), background var(--dur-mid) var(--ease);
+}
+
+@media (hover: hover) {
+  .feature:hover .icon {
+    transform: scale(1.08) rotate(-6deg);
+    background: rgba(212, 175, 55, 0.18);
+  }
+}
+
+.spec-box,
+.price-row {
+  transition: border-color var(--dur-mid) var(--ease);
+}
+
+/* ------------------ bandeau d appel a l action ------------------ */
+
+.cta-band {
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-band::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--grain);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.cta-band > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ------------------ champs ------------------ */
+
+.field input,
+.field select,
+.field textarea,
+.input-search,
+.input-select {
+  transition:
+    border-color var(--dur-mid) var(--ease),
+    box-shadow var(--dur-mid) var(--ease),
+    background var(--dur-mid) var(--ease);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.input-search:focus,
+.input-select:focus {
+  background: #0d0d0d;
+}
+
+/* ------------------ squelettes de chargement ------------------ */
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #131313 0%, #090909 100%);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.055), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 1.5s var(--ease) infinite;
+}
+
+.sk-media {
+  aspect-ratio: 16 / 10;
+  background: #101010;
+  border-bottom: 1px solid var(--line);
+}
+
+.sk-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.sk-line {
+  height: 11px;
+  border-radius: 6px;
+  background: #191919;
+}
+
+.sk-line.w40 {
+  width: 40%;
+}
+
+.sk-line.w70 {
+  width: 70%;
+}
+
+.sk-line.w55 {
+  width: 55%;
+}
+
+.sk-line.tall {
+  height: 20px;
+}
+
+/* ------------------ couche d animation ------------------ */
+
+/* .reveal est ajoute par le script : sans JS, tout reste visible */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 80ms);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* entree du hero, des le chargement */
+.hero-badge,
+.hero h1,
+.hero p,
+.hero-actions,
+.hero-stats {
+  animation: rise 0.85s var(--ease-out) both;
+}
+
+.hero-badge {
+  animation-delay: 0.05s;
+}
+
+.hero h1 {
+  animation-delay: 0.14s;
+}
+
+.hero p {
+  animation-delay: 0.24s;
+}
+
+.hero-actions {
+  animation-delay: 0.34s;
+}
+
+.hero-stats {
+  animation-delay: 0.44s;
+}
+
+/* travelling lent sur la photo de fond */
+.hero-bg {
+  animation: kenburns 26s var(--ease) both;
+}
+
+/* changement de page */
+.page-enter {
+  animation: page-in 0.45s var(--ease-out) both;
+}
+
+/* le trait dore se deploie a l apparition du titre de section */
+.section-head.is-visible .divider,
+.section-head.reveal .divider {
+  animation: draw 0.7s var(--ease-out) 0.15s both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@keyframes draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes sweep {
+  from {
+    left: -140%;
+  }
+  to {
+    left: 160%;
+  }
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes kenburns {
+  from {
+    transform: scale(1.04);
+  }
+  to {
+    transform: scale(1.15);
+  }
+}
+
+@keyframes pulse-dot {
+  0% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 7px rgba(212, 175, 55, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+  }
+}
+
+/* ------------------ accessibilite : mouvement reduit ------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .hero-badge,
+  .hero h1,
+  .hero p,
+  .hero-actions,
+  .hero-stats,
+  .hero-bg,
+  .page-enter,
+  .btn-gold::after,
+  .btn-whatsapp::after,
+  .hero-badge::before,
+  .skeleton::after,
+  .section-head .divider {
+    animation: none !important;
+  }
+
+  .hero-bg {
+    transform: scale(1.04);
+  }
+
+  .scroll-progress {
+    display: none;
+  }
+}
+
+/* ------------------ ajustements telephone ------------------ */
+
+@media (max-width: 760px) {
+  .hero h1 {
+    letter-spacing: -0.01em;
+  }
+
+  .section-head .eyebrow {
+    padding-left: 0;
+  }
+
+  .section-head .eyebrow::before {
+    display: none;
+  }
+
+  .reveal {
+    transform: translateY(16px);
+    transition-duration: 0.55s;
+    transition-delay: calc(var(--i, 0) * 55ms);
+  }
+
+  .scroll-progress {
+    height: 2px;
+  }
+
+  /* pas de travelling sur la photo : trop couteux en batterie */
+  .hero-bg {
+    animation: none;
+    transform: scale(1.04);
+  }
+}

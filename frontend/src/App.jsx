@@ -5,6 +5,7 @@ import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
 import WhatsAppFloat from './components/WhatsAppFloat.jsx'
 import MobileDock from './components/MobileDock.jsx'
+import { ScrollProgress, useScrollReveal } from './components/Motion.jsx'
 
 import Home from './pages/Home.jsx'
 import Fleet from './pages/Fleet.jsx'
@@ -31,10 +32,15 @@ function ScrollToTop() {
 
 /** Gabarit du site visiteur. */
 function PublicLayout() {
+  const { pathname } = useLocation()
+  useScrollReveal()
+
   return (
     <>
+      <ScrollProgress />
       <Navbar />
-      <main>
+      {/* la cle relance l animation d entree a chaque changement de page */}
+      <main key={pathname} className="page-enter">
         <Outlet />
       </main>
       <Footer />

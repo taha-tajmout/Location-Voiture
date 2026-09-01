@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { api } from '../api/client.js'
 import VehicleCard from '../components/VehicleCard.jsx'
-import { Loader, Empty } from '../components/Loader.jsx'
+import { CardSkeletonGrid, Empty } from '../components/Loader.jsx'
 
 const SORTS = [
   { key: 'default', label: 'Par defaut' },
@@ -110,7 +110,7 @@ export default function Fleet({ type }) {
           </div>
 
           {loading ? (
-            <Loader />
+            <CardSkeletonGrid />
           ) : error ? (
             <div className="alert alert-error">{error}</div>
           ) : visible.length === 0 ? (

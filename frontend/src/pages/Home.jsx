@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { api } from '../api/client.js'
 import { useSite } from '../context/SiteContext.jsx'
 import VehicleCard from '../components/VehicleCard.jsx'
-import { Loader, Empty } from '../components/Loader.jsx'
+import { CardSkeletonGrid, Empty } from '../components/Loader.jsx'
 import {
   IconArrowRight,
   IconCar,
@@ -122,7 +122,7 @@ export default function Home() {
           </div>
 
           {loading ? (
-            <Loader />
+            <CardSkeletonGrid count={3} />
           ) : featured.length === 0 ? (
             <Empty label="Aucun vehicule en vedette pour le moment." />
           ) : (
