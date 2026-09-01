@@ -91,18 +91,15 @@ export default function VehiclesAdmin() {
             </button>
           ))}
         </div>
-        <input
-          placeholder="Rechercher un vehicule..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{
-            background: 'var(--black-soft)',
-            border: '1px solid var(--line-strong)',
-            borderRadius: 9,
-            padding: '9px 13px',
-            minWidth: 220,
-          }}
-        />
+        <div className="filters-tools">
+          <input
+            className="input-search"
+            type="search"
+            placeholder="Rechercher un vehicule..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
       </div>
 
       {loading ? (
@@ -127,14 +124,14 @@ export default function VehiclesAdmin() {
             <tbody>
               {visible.map((vehicle) => (
                 <tr key={vehicle.id}>
-                  <td>
+                  <td data-label="Photo">
                     {vehicle.imageUrl ? (
                       <img className="table-thumb" src={vehicle.imageUrl} alt="" />
                     ) : (
                       <div className="table-thumb" style={{ background: '#101010' }} />
                     )}
                   </td>
-                  <td>
+                  <td data-label="Vehicule">
                     <strong>{vehicle.name}</strong>
                     <div style={{ color: 'var(--muted)', fontSize: '0.78rem' }}>
                       {[vehicle.brand, vehicle.category, vehicle.year].filter(Boolean).join(' · ')}
@@ -145,13 +142,13 @@ export default function VehiclesAdmin() {
                       )}
                     </div>
                   </td>
-                  <td>{vehicle.type === 'MOTO' ? 'Moto' : 'Voiture'}</td>
-                  <td className="gold-text">
+                  <td data-label="Type">{vehicle.type === 'MOTO' ? 'Moto' : 'Voiture'}</td>
+                  <td className="gold-text" data-label="Jour">
                     <strong>{formatPrice(vehicle.pricePerDay)}</strong>
                   </td>
-                  <td>{vehicle.pricePerWeek ? formatPrice(vehicle.pricePerWeek) : '-'}</td>
-                  <td>{vehicle.pricePerMonth ? formatPrice(vehicle.pricePerMonth) : '-'}</td>
-                  <td>
+                  <td data-label="Semaine">{vehicle.pricePerWeek ? formatPrice(vehicle.pricePerWeek) : '-'}</td>
+                  <td data-label="Mois">{vehicle.pricePerMonth ? formatPrice(vehicle.pricePerMonth) : '-'}</td>
+                  <td data-label="Statut">
                     <button
                       className={`pill ${vehicle.available ? 'ok' : 'no'}`}
                       style={{ cursor: 'pointer' }}
@@ -161,7 +158,7 @@ export default function VehiclesAdmin() {
                       {vehicle.available ? 'Disponible' : 'Indisponible'}
                     </button>
                   </td>
-                  <td>
+                  <td data-label="Actions">
                     <div className="row-actions">
                       <button className="btn btn-ghost btn-sm" onClick={() => setEditing(vehicle)}>
                         Modifier

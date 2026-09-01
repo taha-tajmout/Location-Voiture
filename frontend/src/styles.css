@@ -28,6 +28,13 @@
   --shadow: 0 18px 45px rgba(0, 0, 0, 0.6);
   --max: 1240px;
   --nav-h: 78px;
+
+  /* mobile */
+  --dock-h: 66px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+  --tap: 46px;
 }
 
 * {
@@ -38,6 +45,8 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -196,6 +205,9 @@ textarea {
 
 .btn-block {
   width: 100%;
+  /* un libelle long (ex : "Autre numero : 06 xx xx xx xx") doit pouvoir
+     revenir a la ligne, sinon il elargit toute la page sur telephone. */
+  white-space: normal;
 }
 
 /* ------------------ navigation ------------------ */
@@ -705,6 +717,11 @@ textarea {
   grid-template-columns: 1.25fr 0.85fr;
   gap: 40px;
   align-items: start;
+}
+
+/* sans ceci, un contenu insecable dans une colonne elargit toute la grille */
+.detail > * {
+  min-width: 0;
 }
 
 .detail-gallery img.main {
@@ -1536,5 +1553,1241 @@ tbody tr:hover {
 
   .section {
     padding: 60px 0;
+  }
+}
+
+/* =========================================================
+   REFONTE MOBILE - design telephone professionnel
+   Tout ce qui suit ne concerne que les ecrans tactiles /
+   les petites largeurs. Le rendu bureau reste inchange.
+   ========================================================= */
+
+/* ---------- confort tactile global ---------- */
+
+button,
+a,
+.chip,
+.pill {
+  -webkit-tap-highlight-color: rgba(212, 175, 55, 0.16);
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* sur ecran tactile, les effets de survol restent colles apres un tap */
+@media (hover: none) {
+  .btn:hover,
+  .card:hover,
+  .feature:hover,
+  .phone-card:hover,
+  .socials a:hover,
+  .wa-main:hover {
+    transform: none;
+  }
+
+  .card:hover .card-media img {
+    transform: none;
+  }
+
+  .card:hover {
+    box-shadow: none;
+    border-color: var(--line);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- champs de la barre d outils (recherche / tri) ---------- */
+
+.input-search,
+.input-select {
+  background: var(--black-soft);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.input-search:focus,
+.input-select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.14);
+}
+
+.input-search {
+  min-width: 190px;
+  flex: 1 1 190px;
+}
+
+.filters-tools {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* =========================================================
+   BARRE D ACTIONS BASSE (telephone uniquement)
+   ========================================================= */
+
+.mobile-dock {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 80;
+  gap: 10px;
+  padding: 10px calc(14px + var(--safe-r)) calc(10px + var(--safe-b)) calc(14px + var(--safe-l));
+  background: rgba(6, 6, 6, 0.92);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid var(--line);
+}
+
+.dock-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: var(--tap);
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.dock-btn.call {
+  background: transparent;
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.dock-btn.wa {
+  background: var(--whatsapp);
+  color: #06301a;
+  box-shadow: 0 8px 22px rgba(37, 211, 102, 0.28);
+}
+
+/* feuille de choix du numero */
+
+.sheet-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(3px);
+  z-index: 90;
+  border: none;
+  width: 100%;
+}
+
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 95;
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-bottom: none;
+  border-radius: 22px 22px 0 0;
+  padding: 10px 18px calc(20px + var(--safe-b));
+  box-shadow: 0 -18px 45px rgba(0, 0, 0, 0.6);
+  animation: sheet-up 0.22s ease;
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+.sheet-handle {
+  width: 44px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--line-strong);
+  margin: 0 auto 14px;
+}
+
+.sheet-title {
+  display: block;
+  color: var(--muted);
+  font-size: 0.66rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.sheet-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: var(--tap);
+  padding: 12px 15px;
+  margin-bottom: 9px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--black-soft);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.sheet-item svg {
+  color: var(--gold);
+  flex: 0 0 auto;
+}
+
+/* =========================================================
+   BARRE DE RESERVATION - page vehicule (telephone)
+   ========================================================= */
+
+.detail-bar {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 80;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px calc(16px + var(--safe-r)) calc(10px + var(--safe-b)) calc(16px + var(--safe-l));
+  background: rgba(6, 6, 6, 0.94);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(212, 175, 55, 0.28);
+}
+
+.detail-bar small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.62rem;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.detail-bar strong {
+  font-size: 1.24rem;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.detail-bar .btn {
+  min-height: var(--tap);
+  padding-inline: 22px;
+}
+
+/* =========================================================
+   TABLETTE ET EN DESSOUS (max 980px) - espace admin
+   ========================================================= */
+
+@media (max-width: 980px) {
+  /* la barre laterale devient une barre d onglets horizontale */
+  .sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    gap: 6px;
+    padding: 10px 14px;
+    background: rgba(5, 5, 5, 0.94);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sidebar > * {
+    flex: 0 0 auto;
+  }
+
+  .sidebar .brand {
+    margin: 0 6px 0 0;
+    padding-right: 12px;
+    border-right: 1px solid var(--line);
+  }
+
+  .sidebar .brand img,
+  .sidebar .brand svg {
+    height: 32px;
+  }
+
+  .sidebar .spacer {
+    display: none;
+  }
+
+  .sidebar a,
+  .sidebar button {
+    white-space: nowrap;
+    min-height: 42px;
+    padding: 9px 14px;
+  }
+}
+
+/* =========================================================
+   TELEPHONE (max 760px)
+   ========================================================= */
+
+@media (max-width: 760px) {
+  :root {
+    --nav-h: 66px;
+  }
+
+  .container {
+    padding-left: calc(18px + var(--safe-l));
+    padding-right: calc(18px + var(--safe-r));
+  }
+
+  .section {
+    padding: 54px 0;
+  }
+
+  .section-head {
+    margin-bottom: 30px;
+  }
+
+  .section-head p {
+    font-size: 0.92rem;
+  }
+
+  /* ---------- barre de navigation ---------- */
+
+  .announcement {
+    font-size: 0.74rem;
+    letter-spacing: 0.2px;
+    padding: 8px 14px;
+  }
+
+  .navbar .inner {
+    gap: 10px;
+  }
+
+  .brand img,
+  .brand svg {
+    height: 38px;
+  }
+
+  .brand-text strong {
+    font-size: 0.92rem;
+    letter-spacing: 2px;
+  }
+
+  .brand-text span {
+    font-size: 0.55rem;
+    letter-spacing: 2.6px;
+  }
+
+  /* bouton menu : trois barres animees en croix */
+  .burger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: var(--tap);
+    height: var(--tap);
+    border-radius: 12px;
+    border-color: var(--line-strong);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .burger span {
+    display: block;
+    width: 19px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--gold);
+    transition: transform 0.24s ease, opacity 0.18s ease;
+  }
+
+  .burger.is-open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .burger.is-open span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .burger.is-open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* tiroir de navigation */
+  .nav-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    border: none;
+    animation: fade-in 0.2s ease;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .nav-links {
+    /* pas de backdrop-filter ici : imbrique dans celui de .navbar, il rend
+       le tiroir translucide et laisse voir la page au travers. */
+    background: #080808;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 0 0 22px 22px;
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.65);
+    padding: 12px calc(18px + var(--safe-r)) 20px calc(18px + var(--safe-l));
+    gap: 0;
+    max-height: calc(100dvh - var(--nav-h));
+    overflow-y: auto;
+  }
+
+  .nav-links.open {
+    animation: drawer-down 0.24s ease;
+  }
+
+  @keyframes drawer-down {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+  }
+
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 54px;
+    padding: 0;
+    font-size: 0.92rem;
+    letter-spacing: 1.8px;
+    color: var(--text);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-links a::before {
+    content: "\203A";
+    order: 2;
+    color: var(--muted-2);
+    font-size: 1.4rem;
+    line-height: 1;
+  }
+
+  .nav-links a.active {
+    color: var(--gold);
+  }
+
+  .nav-links a.active::after {
+    display: none;
+  }
+
+  .nav-links .nav-cta {
+    justify-content: center;
+    margin-top: 16px;
+    min-height: var(--tap);
+    border: none;
+    border-radius: 999px;
+    background: var(--whatsapp);
+    color: #06301a;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    gap: 9px;
+  }
+
+  .nav-links .nav-cta::before {
+    content: none;
+  }
+
+  /* ---------- hero ---------- */
+
+  .hero {
+    /* 100vh deborde sous la barre d outils du navigateur mobile */
+    min-height: calc(100svh - var(--nav-h));
+  }
+
+  .hero-content {
+    padding: 56px 0 44px;
+  }
+
+  .hero-badge {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    padding: 7px 14px;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.15rem, 10.5vw, 3rem);
+    line-height: 1.04;
+    margin-bottom: 14px;
+  }
+
+  .hero p {
+    font-size: 0.97rem;
+    margin-bottom: 26px;
+  }
+
+  .hero-actions {
+    gap: 10px;
+  }
+
+  .hero-actions .btn {
+    flex: 1 1 100%;
+    min-height: 52px;
+    font-size: 0.84rem;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-top: 38px;
+    padding-top: 22px;
+  }
+
+  .hero-stats div {
+    text-align: center;
+    padding: 0 6px;
+  }
+
+  .hero-stats div + div {
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .hero-stats div strong {
+    font-size: 1.35rem;
+  }
+
+  .hero-stats div span {
+    font-size: 0.58rem;
+    letter-spacing: 1.2px;
+  }
+
+  /* ---------- cartes vehicules ---------- */
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .card {
+    border-radius: 18px;
+  }
+
+  .card-media {
+    aspect-ratio: 3 / 2;
+  }
+
+  .badge {
+    font-size: 0.6rem;
+    padding: 5px 10px;
+  }
+
+  .card-body {
+    padding: 16px 16px 18px;
+    gap: 11px;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+  }
+
+  .card-price {
+    align-items: center;
+  }
+
+  .price-value {
+    font-size: 1.5rem;
+  }
+
+  .card-actions {
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+  }
+
+  .card-actions .btn {
+    min-height: var(--tap);
+    font-size: 0.78rem;
+  }
+
+  .card-actions .btn-whatsapp {
+    width: var(--tap);
+    padding: 0;
+  }
+
+  /* ---------- barre de filtres ---------- */
+
+  .filters {
+    flex-direction: column;
+    /* en colonne, "wrap" fait etirer les enfants a la largeur du plus large
+       contenu (et non a celle du parent) : la page deborde alors en largeur. */
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px;
+    margin-bottom: 22px;
+    border-radius: 16px;
+  }
+
+  .filters .chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin: -2px -14px;
+    padding: 2px 14px;
+  }
+
+  .filters .chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filters .chip {
+    flex: 0 0 auto;
+    min-height: 40px;
+    padding: 8px 16px;
+  }
+
+  .filters-tools {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .filters-tools .input-search {
+    grid-column: 1 / -1;
+    min-width: 0;
+    width: 100%;
+    min-height: var(--tap);
+  }
+
+  .filters-tools .input-select {
+    min-height: var(--tap);
+    width: 100%;
+  }
+
+  .filters-tools .chip {
+    min-height: var(--tap);
+  }
+
+  /* ---------- page vehicule ---------- */
+
+  .breadcrumb {
+    padding: 16px 0;
+    font-size: 0.76rem;
+  }
+
+  .detail {
+    gap: 22px;
+  }
+
+  .detail-gallery img.main,
+  .detail-gallery .img-placeholder.main {
+    aspect-ratio: 4 / 3;
+    border-radius: 18px;
+  }
+
+  .thumbs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .thumbs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .thumbs img {
+    flex: 0 0 auto;
+    width: 84px;
+    height: 62px;
+    scroll-snap-align: start;
+  }
+
+  .panel {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .spec-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .spec-box {
+    padding: 11px 12px;
+  }
+
+  .price-row.highlight strong {
+    font-size: 1.3rem;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    min-height: var(--tap);
+    /* 16px minimum : en dessous, iOS zoome tout seul sur le champ */
+    font-size: 16px;
+  }
+
+  /* un input[type=date] natif a une largeur minimale importante : a deux
+     par ligne il fait deborder la page. On les empile sur telephone. */
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+
+  .field {
+    min-width: 0;
+  }
+
+  .checkbox {
+    min-height: var(--tap);
+  }
+
+  /* la barre de reservation prend le relais en bas d ecran */
+  .detail-bar {
+    display: flex;
+  }
+
+  /* ---------- atouts ---------- */
+
+  .features {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .feature {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+    padding: 18px;
+  }
+
+  .feature .icon {
+    margin: 0;
+  }
+
+  .feature h3 {
+    font-size: 0.92rem;
+    margin-bottom: 4px;
+  }
+
+  .feature p {
+    font-size: 0.84rem;
+  }
+
+  /* ---------- bande de contact ---------- */
+
+  .cta-band {
+    padding: 50px 0;
+  }
+
+  .phone-cards {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .phone-card {
+    padding: 18px;
+  }
+
+  .phone-card strong {
+    font-size: 1.55rem;
+  }
+
+  .phone-card .row .btn {
+    min-height: var(--tap);
+    font-size: 0.76rem;
+  }
+
+  /* ---------- pied de page ---------- */
+
+  .footer {
+    padding: 44px 0 calc(22px + var(--dock-h) + var(--safe-b));
+  }
+
+  .footer-grid {
+    gap: 32px;
+  }
+
+  .footer ul {
+    gap: 0;
+  }
+
+  .footer li {
+    border-bottom: 1px solid var(--line);
+    min-height: var(--tap);
+    align-items: center;
+  }
+
+  .footer li:last-child {
+    border-bottom: none;
+  }
+
+  .footer li a {
+    display: flex;
+    align-items: center;
+    min-height: var(--tap);
+  }
+
+  .socials a {
+    width: var(--tap);
+    height: var(--tap);
+  }
+
+  .footer-bottom {
+    justify-content: center;
+    text-align: center;
+    gap: 14px;
+  }
+
+  .footer-bottom a {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    color: var(--gold);
+  }
+
+  /* ---------- barre basse : remplace le bouton flottant ---------- */
+
+  .mobile-dock {
+    display: flex;
+  }
+
+  .wa-float {
+    display: none;
+  }
+
+  body.has-detail-bar .mobile-dock {
+    display: none;
+  }
+
+  /* ---------- espace admin ---------- */
+
+  .admin-main {
+    padding: 18px 16px calc(40px + var(--safe-b));
+  }
+
+  .admin-header h1 {
+    font-size: 1.2rem;
+  }
+
+  .stat-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .stat {
+    padding: 16px;
+  }
+
+  .stat strong {
+    font-size: 1.6rem;
+  }
+
+  /* les tableaux deviennent des fiches empilees */
+  .table-wrap {
+    background: none;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  table,
+  thead,
+  tbody,
+  tr,
+  td {
+    display: block;
+    width: 100%;
+  }
+
+  table {
+    min-width: 0;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tbody tr {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 6px 14px;
+    margin-bottom: 14px;
+  }
+
+  tbody tr:hover {
+    background: var(--panel);
+  }
+
+  tbody td {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    align-items: start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  tbody td::before {
+    content: attr(data-label);
+    color: var(--muted-2);
+    font-size: 0.62rem;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding-top: 3px;
+  }
+
+  tbody td:not([data-label]) {
+    grid-template-columns: 1fr;
+  }
+
+  tbody td:not([data-label])::before {
+    content: none;
+  }
+
+  tbody tr td:last-child {
+    border-bottom: none;
+  }
+
+  .row-actions .btn {
+    min-height: 42px;
+    flex: 1 1 auto;
+  }
+
+  .table-thumb {
+    width: 100%;
+    max-width: 150px;
+    height: auto;
+    aspect-ratio: 16 / 11;
+  }
+
+  /* les fenetres d edition deviennent des feuilles plein ecran */
+  .modal-backdrop {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .modal {
+    border-radius: 20px 20px 0 0;
+    border-bottom: none;
+    max-height: 94dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-head {
+    padding: 16px 18px;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .modal-body {
+    padding: 18px;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .modal-foot {
+    padding: 14px 18px calc(14px + var(--safe-b));
+    gap: 10px;
+    background: var(--panel);
+  }
+
+  .modal-foot .btn {
+    flex: 1;
+    min-height: var(--tap);
+  }
+
+  .icon-btn {
+    min-width: 42px;
+    min-height: 42px;
+  }
+
+  .login-card {
+    padding: 30px 22px;
+  }
+
+  /* ---------- divers ---------- */
+
+  .page-head {
+    padding: 40px 0 26px;
+  }
+
+  .btn-sm {
+    padding: 11px 16px;
+  }
+
+  .alert {
+    font-size: 0.82rem;
+  }
+}
+
+/* =========================================================
+   PETITS TELEPHONES (max 380px)
+   ========================================================= */
+
+@media (max-width: 380px) {
+  .container {
+    padding-left: calc(14px + var(--safe-l));
+    padding-right: calc(14px + var(--safe-r));
+  }
+
+  .brand-text strong {
+    font-size: 0.84rem;
+    letter-spacing: 1.6px;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero-stats div strong {
+    font-size: 1.15rem;
+  }
+
+  .hero-stats div span {
+    font-size: 0.52rem;
+    letter-spacing: 0.8px;
+  }
+
+  /* la fiche technique tient en 2 colonnes meme sur un petit ecran ;
+     les champs de dates, eux, ont besoin de toute la largeur. */
+  .field-row,
+  .stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .field-row {
+    gap: 0;
+  }
+
+  .dock-btn {
+    font-size: 0.74rem;
+    letter-spacing: 0.6px;
+  }
+
+  /* "WhatsApp" + "Appeler" cote a cote ne tiennent plus : on les empile. */
+  .phone-card .row {
+    grid-template-columns: 1fr;
+  }
+
+  tbody td {
+    grid-template-columns: 84px 1fr;
+    gap: 8px;
+  }
+}
+
+/* =========================================================
+   TELEPHONE EN PAYSAGE
+   ========================================================= */
+
+@media (max-width: 940px) and (orientation: landscape) and (max-height: 500px) {
+  .hero {
+    min-height: 0;
+  }
+
+  .hero-content {
+    padding: 34px 0 30px;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+
+  .hero p {
+    margin-bottom: 18px;
+  }
+
+  .hero-actions .btn {
+    flex: 0 1 auto;
+  }
+
+  .hero-stats {
+    margin-top: 22px;
+    padding-top: 16px;
+  }
+
+  .nav-links {
+    max-height: calc(100dvh - var(--nav-h));
+  }
+}
+
+/* ---------- page vehicule : espace pour la barre basse ---------- */
+
+.vehicle-page {
+  padding-bottom: 70px;
+}
+
+#reserver {
+  scroll-margin-top: calc(var(--nav-h) + 14px);
+}
+
+@media (max-width: 760px) {
+  .vehicle-page {
+    padding-bottom: calc(40px + var(--dock-h) + var(--safe-b));
+  }
+}
+
+
+@media (max-width: 760px) {
+  /* les trois libelles de statistiques tiennent sur une seule ligne */
+  .hero-stats div {
+    padding: 0 4px;
+  }
+
+  .hero-stats div span {
+    font-size: 0.56rem;
+    letter-spacing: 0.3px;
+  }
+}
+
+/* =========================================================
+   AFFINAGE DES FICHES ADMIN SUR TELEPHONE
+   ========================================================= */
+
+@media (max-width: 760px) {
+  /* Une cellule contient souvent plusieurs elements (titre + sous-titre,
+     select + pastille...). Sans cela, ils se repartissent dans la colonne
+     du libelle au lieu de rester dans celle de la valeur. */
+  tbody td::before {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  tbody td > * {
+    grid-column: 2;
+  }
+
+  /* pastilles et boutons ne doivent pas s etirer sur toute la largeur */
+  tbody td {
+    justify-items: start;
+  }
+
+  tbody td .row-actions {
+    width: 100%;
+  }
+
+  /* la photo occupe toute la largeur, en haut de la fiche */
+  tbody td[data-label='Photo'] {
+    grid-template-columns: 1fr;
+    padding-top: 12px;
+  }
+
+  tbody td[data-label='Photo']::before {
+    display: none;
+  }
+
+  tbody td[data-label='Photo'] > * {
+    grid-column: 1;
+  }
+
+  tbody td[data-label='Photo'] .table-thumb {
+    max-width: none;
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* =========================================================
+   BANDE 761 - 900px (iPad portrait, telephone en paysage)
+   Le menu horizontal y est encore affiche : on resserre les
+   espacements pour qu il ne deborde pas de l ecran.
+   ========================================================= */
+
+@media (min-width: 761px) and (max-width: 900px) {
+  .navbar .inner {
+    gap: 12px;
+  }
+
+  .nav-links {
+    gap: 20px;
+  }
+
+  .nav-links a {
+    font-size: 0.76rem;
+    letter-spacing: 1px;
+  }
+
+  .nav-actions .btn {
+    padding: 9px 14px;
+  }
+
+  .brand img,
+  .brand svg {
+    height: 40px;
+  }
+}
+
+/* le CTA du tiroir n existe que sur telephone (le header a deja son bouton) */
+.nav-links .nav-cta {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .nav-links .nav-cta {
+    display: flex;
+  }
+}
+
+/* =========================================================
+   CORRECTIF : bloc "atouts" en 2 colonnes sur telephone
+   Sans placement explicite, le paragraphe est auto-place dans
+   la colonne de l icone (56px) et se coupe a un mot par ligne.
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .feature {
+    align-items: center;
+    column-gap: 16px;
+    row-gap: 4px;
+  }
+
+  .feature .icon {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+
+  .feature h3 {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: end;
+  }
+
+  .feature p {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
   }
 }

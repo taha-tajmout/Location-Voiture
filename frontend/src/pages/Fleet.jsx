@@ -85,29 +85,15 @@ export default function Fleet({ type }) {
               ))}
             </div>
 
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+            <div className="filters-tools">
               <input
+                className="input-search"
+                type="search"
                 placeholder="Rechercher..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                style={{
-                  background: 'var(--black-soft)',
-                  border: '1px solid var(--line-strong)',
-                  borderRadius: 9,
-                  padding: '9px 13px',
-                  minWidth: 170,
-                }}
               />
-              <select
-                value={sort}
-                onChange={(e) => setSort(e.target.value)}
-                style={{
-                  background: 'var(--black-soft)',
-                  border: '1px solid var(--line-strong)',
-                  borderRadius: 9,
-                  padding: '9px 13px',
-                }}
-              >
+              <select className="input-select" value={sort} onChange={(e) => setSort(e.target.value)}>
                 {SORTS.map((s) => (
                   <option key={s.key} value={s.key}>
                     {s.label}

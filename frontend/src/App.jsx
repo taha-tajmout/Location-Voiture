@@ -4,6 +4,7 @@ import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
 import WhatsAppFloat from './components/WhatsAppFloat.jsx'
+import MobileDock from './components/MobileDock.jsx'
 
 import Home from './pages/Home.jsx'
 import Fleet from './pages/Fleet.jsx'
@@ -38,6 +39,7 @@ function PublicLayout() {
       </main>
       <Footer />
       <WhatsAppFloat />
+      <MobileDock />
     </>
   )
 }

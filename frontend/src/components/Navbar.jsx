@@ -21,6 +21,19 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Menu ouvert : on bloque le defilement du site derriere le tiroir.
+  useEffect(() => {
+    if (!open) return undefined
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onEscape = (e) => e.key === 'Escape' && setOpen(false)
+    window.addEventListener('keydown', onEscape)
+    return () => {
+      document.body.style.overflow = previous
+      window.removeEventListener('keydown', onEscape)
+    }
+  }, [open])
+
   const wa = whatsappLink(settings.phone1, settings.countryCode, settings.whatsappMessage)
 
   return (
@@ -42,6 +55,14 @@ export default function Navbar() {
             <NavLink to="/voitures">Voitures</NavLink>
             <NavLink to="/motos">Motos</NavLink>
             <NavLink to="/contact">Contact</NavLink>
+
+            {/* Visible uniquement dans le tiroir mobile : le bouton du header y est masque. */}
+            {settings.phone1 && (
+              <a href={wa} target="_blank" rel="noreferrer" className="nav-cta">
+                <IconWhatsapp width={17} height={17} />
+                Reserver sur WhatsApp
+              </a>
+            )}
           </nav>
 
           <div className="nav-actions">
@@ -50,16 +71,22 @@ export default function Navbar() {
               Reserver
             </a>
             <button
-              className="burger"
+              className={`burger${open ? ' is-open' : ''}`}
               onClick={() => setOpen((v) => !v)}
-              aria-label="Menu"
+              aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'}
               aria-expanded={open}
             >
-              {open ? '✕' : '☰'}
+              <span />
+              <span />
+              <span />
             </button>
           </div>
         </div>
       </header>
+
+      {open && (
+        <button className="nav-scrim" aria-label="Fermer le menu" onClick={() => setOpen(false)} />
+      )}
     </>
   )
 }

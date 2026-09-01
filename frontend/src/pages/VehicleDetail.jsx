@@ -30,6 +30,13 @@ export default function VehicleDetail() {
   const [sending, setSending] = useState(false)
   const [feedback, setFeedback] = useState(null)
 
+  // Sur telephone, cette page affiche sa propre barre basse (prix + reserver) :
+  // on masque celle du site pour ne pas empiler deux barres.
+  useEffect(() => {
+    document.body.classList.add('has-detail-bar')
+    return () => document.body.classList.remove('has-detail-bar')
+  }, [])
+
   useEffect(() => {
     setLoading(true)
     api
@@ -130,7 +137,7 @@ export default function VehicleDetail() {
   ].filter((s) => s && s.value)
 
   return (
-    <section className="container" style={{ paddingBottom: 70 }}>
+    <section className="container vehicle-page">
       <div className="breadcrumb">
         <Link to="/">Accueil</Link> / <Link to={isMoto ? '/motos' : '/voitures'}>{isMoto ? 'Motos' : 'Voitures'}</Link>{' '}
         / <span style={{ color: 'var(--gold)' }}>{vehicle.name}</span>
@@ -180,7 +187,7 @@ export default function VehicleDetail() {
         </div>
 
         {/* ---------- Tarifs + formulaire ---------- */}
-        <aside>
+        <aside id="reserver">
           <div className="panel">
             <span className={`pill ${vehicle.available ? 'ok' : 'no'}`}>
               {vehicle.available ? 'Disponible' : 'Indisponible'}
@@ -317,6 +324,25 @@ export default function VehicleDetail() {
           </div>
         </aside>
       </div>
+
+      {/* Barre de reservation collante — telephone uniquement (voir .detail-bar) */}
+      <div className="detail-bar">
+        <div>
+          <small>A partir de</small>
+          <strong className="gold-text">{formatPrice(vehicle.pricePerDay)}</strong>
+        </div>
+        <button
+          type="button"
+          className="btn btn-whatsapp"
+          onClick={() =>
+            document.getElementById('reserver')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          }
+        >
+          <IconWhatsapp width={18} height={18} />
+          Reserver
+        </button>
+      </div>
     </section>
   )
 }
+

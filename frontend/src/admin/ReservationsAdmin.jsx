@@ -107,25 +107,25 @@ export default function ReservationsAdmin() {
             <tbody>
               {visible.map((reservation) => (
                 <tr key={reservation.id}>
-                  <td>
+                  <td data-label="Client">
                     <strong>{reservation.customerName}</strong>
                     <div style={{ color: 'var(--muted)', fontSize: '0.78rem' }}>
                       {reservation.customerPhone}
                       {reservation.customerEmail ? ` · ${reservation.customerEmail}` : ''}
                     </div>
                   </td>
-                  <td>{reservation.vehicleName || '-'}</td>
-                  <td style={{ whiteSpace: 'nowrap' }}>
+                  <td data-label="Vehicule">{reservation.vehicleName || '-'}</td>
+                  <td data-label="Periode" style={{ whiteSpace: 'nowrap' }}>
                     {reservation.startDate || '?'} → {reservation.endDate || '?'}
                     {reservation.pickupPlace && (
                       <div style={{ color: 'var(--muted)', fontSize: '0.78rem' }}>{reservation.pickupPlace}</div>
                     )}
                   </td>
-                  <td style={{ maxWidth: 220, color: 'var(--muted)', fontSize: '0.82rem' }}>
+                  <td data-label="Message" style={{ maxWidth: 220, color: 'var(--muted)', fontSize: '0.82rem' }}>
                     {reservation.message || '-'}
                   </td>
-                  <td style={{ whiteSpace: 'nowrap' }}>{formatDate(reservation.createdAt)}</td>
-                  <td>
+                  <td data-label="Recue le" style={{ whiteSpace: 'nowrap' }}>{formatDate(reservation.createdAt)}</td>
+                  <td data-label="Statut">
                     <select
                       value={reservation.status}
                       onChange={(e) => changeStatus(reservation, e.target.value)}
@@ -149,7 +149,7 @@ export default function ReservationsAdmin() {
                       </span>
                     </div>
                   </td>
-                  <td>
+                  <td data-label="Actions">
                     <div className="row-actions">
                       <a
                         className="btn btn-whatsapp btn-sm"
