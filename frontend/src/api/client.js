@@ -1,5 +1,11 @@
 // Petit client HTTP partage par tout le site.
-// En developpement, Vite redirige /api vers http://localhost:8080 (voir vite.config.js).
+//
+// En developpement, Vite redirige /api vers http://localhost:8080 (voir
+// vite.config.js) : VITE_API_URL reste vide et les appels sont relatifs.
+//
+// En production, VITE_API_URL pointe sur la fonction Neon qui heberge l'API.
+// Ce n'est pas un secret : c'est une adresse publique, figee au moment du build.
+const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '')
 
 const TOKEN_KEY = 'mlc_admin_token'
 
@@ -22,7 +28,7 @@ async function request(method, url, body, isForm = false) {
   if (token) headers.Authorization = `Bearer ${token}`
   if (!isForm && body !== undefined) headers['Content-Type'] = 'application/json'
 
-  const response = await fetch(url, {
+  const response = await fetch(API_BASE + url, {
     method,
     headers,
     body: isForm ? body : body !== undefined ? JSON.stringify(body) : undefined,

@@ -1,0 +1,17 @@
+{
+  "name": "nouali-car-api",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "API du site Nouali Car, deployee comme fonction Neon (DATABASE_URL injectee automatiquement).",
+  "main": "index.js",
+  "scripts": {
+    "test": "node scripts/smoke-test.mjs",
+    "db:setup": "node scripts/setup-db.mjs",
+    "deploy": "neon functions deploy noualicar --src ."
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "bcryptjs": "^3.0.3"
+  }
+}

@@ -36,11 +36,11 @@ export default function Logo({ height = 46, withText = true }) {
 
   return (
     <>
-      <img src={src} alt="Mehdi Luxury Cars" style={{ height, width: 'auto' }} />
+      <img src={src} alt="Nouali Car S.A.R.L" style={{ height, width: 'auto' }} />
       {withText && (
         <span className="brand-text">
-          <strong className="gold-text">MEHDI</strong>
-          <span>Luxury Cars</span>
+          <strong className="gold-text">NOUALI</strong>
+          <span>Car S.A.R.L</span>
         </span>
       )}
     </>

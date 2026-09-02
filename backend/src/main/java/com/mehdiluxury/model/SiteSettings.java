@@ -14,39 +14,39 @@ public class SiteSettings {
     @Id
     private Long id = 1L;
 
-    private String siteName = "Mehdi Luxury Cars";
+    private String siteName = "Nouali Car";
 
     /** Numeros de reservation (WhatsApp + appel). */
-    private String phone1 = "0661536755";
-    private String phone2 = "0645424295";
+    private String phone1 = "0681142747";
+    private String phone2 = "";
 
     /** Indicatif pays utilise pour construire les liens WhatsApp. */
     private String countryCode = "212";
 
     private String email;
     private String address;
-    private String city = "Maroc";
+    private String city = "Taourirt";
 
     private String instagram;
     private String tiktok;
     private String facebook;
 
     @Column(length = 1000)
-    private String whatsappMessage = "Bonjour Mehdi Luxury Cars, je souhaite reserver un vehicule.";
+    private String whatsappMessage = "Bonjour Nouali Car, je souhaite reserver une voiture.";
 
-    private String heroTitle = "Louez l'exception";
+    private String heroTitle = "Votre voiture a Taourirt";
 
     @Column(length = 1000)
-    private String heroSubtitle = "Voitures et motos de luxe a la location. Reservation immediate par WhatsApp.";
+    private String heroSubtitle = "Location de voitures a Taourirt, 24h/24. Reservation immediate par WhatsApp.";
 
     @Column(length = 1000)
     private String heroImageUrl;
 
     @Column(length = 4000)
-    private String aboutText = "Mehdi Luxury Cars met a votre disposition une flotte de voitures et de motos "
-            + "soigneusement entretenues. Reservation simple, tarifs clairs, livraison possible.";
+    private String aboutText = "Nouali Car S.A.R.L, agence de location de voitures a Taourirt. "
+            + "Vehicules entretenus, tarifs clairs et reservation immediate par WhatsApp, 24h/24.";
 
-    private String openingHours = "Tous les jours : 08h00 - 22h00";
+    private String openingHours = "Ouvert 24h/24";
 
     /** Bandeau affiche en haut du site (promo, message...). */
     private String announcement;

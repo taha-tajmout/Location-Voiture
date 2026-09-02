@@ -33,7 +33,7 @@ export default function AdminLogin() {
         <div className="logo-wrap">
           <Logo height={80} withText={false} />
           <h1 className="gold-text">Espace administrateur</h1>
-          <p className="sub">Mehdi Luxury Cars</p>
+          <p className="sub">Nouali Car S.A.R.L</p>
         </div>
 
         {error && <div className="alert alert-error">{error}</div>}

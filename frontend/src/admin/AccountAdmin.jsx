@@ -30,9 +30,10 @@ export default function AccountAdmin() {
     setSaving(true)
     try {
       await api.post('/api/admin/password', {
-        currentPassword: form.currentPassword,
+        currentPassword:  form.currentPassword,
+        
         newPassword: form.newPassword,
-      })
+      }) 
       setForm({ currentPassword: '', newPassword: '', confirm: '' })
       setMessage('Mot de passe mis a jour.')
     } catch (e) {

@@ -59,7 +59,7 @@ public class DataSeeder implements CommandLineRunner {
         AdminUser admin = new AdminUser();
         admin.setUsername(adminUsername);
         admin.setPasswordHash(passwordEncoder.encode(adminPassword));
-        admin.setDisplayName("Mehdi Luxury Cars");
+        admin.setDisplayName("Nouali Car S.A.R.L");
         admins.save(admin);
         System.out.println();
         System.out.println("=========================================================");
@@ -76,10 +76,8 @@ public class DataSeeder implements CommandLineRunner {
             return;
         }
         SiteSettings s = new SiteSettings();
-        s.setInstagram("https://www.instagram.com/mehdi.luxury.car");
-        s.setTiktok("https://www.tiktok.com/@mehdi.luxury.car");
-        s.setEmail("contact@mehdiluxurycars.ma");
-        s.setAddress("Casablanca, Maroc");
+        s.setInstagram("https://www.instagram.com/nouali_car");
+        s.setAddress("Taourirt, Maroc");
         s.setHeroImageUrl(UNSPLASH + "1503376780353-7e6692767b70" + IMG_OPTIONS);
         settings.save(s);
     }

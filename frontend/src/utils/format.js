@@ -37,7 +37,7 @@ export function callLink(phone) {
 export function vehicleMessage(vehicle, settings) {
   if (!vehicle) return settings?.whatsappMessage || 'Bonjour, je souhaite reserver un vehicule.'
   const kind = vehicle.type === 'MOTO' ? 'la moto' : 'la voiture'
-  return `Bonjour ${settings?.siteName || 'Mehdi Luxury Cars'}, je souhaite reserver ${kind} ${vehicle.name}`
+  return `Bonjour ${settings?.siteName || 'Nouali Car'}, je souhaite reserver ${kind} ${vehicle.name}`
     + `${vehicle.pricePerDay ? ` (${formatPrice(vehicle.pricePerDay)} / jour)` : ''}. Merci de me confirmer la disponibilite.`
 }
 

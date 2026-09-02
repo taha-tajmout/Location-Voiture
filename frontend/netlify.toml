@@ -1,0 +1,26 @@
+# Deploiement du site Nouali Car sur Netlify.
+#
+# Netlify ne sert que le site (fichiers statiques). L'API vit sur une fonction
+# Neon, qui recoit DATABASE_URL automatiquement : aucun secret de base de
+# donnees n'a donc a etre configure ici.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Adresse publique de l'API. Ce n'est pas un secret.
+  VITE_API_URL = "https://br-crimson-breeze-aev4xjv0-noualicar.compute.c-2.us-east-2.aws.neon.tech"
+  NODE_VERSION = "20"
+
+# Application monopage : toute adresse inconnue rend index.html,
+# c'est React Router qui decide de la page.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

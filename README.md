@@ -173,14 +173,78 @@ Base de données consultable : http://localhost:8080/h2-console
 
 ---
 
-## 10. Mise en ligne (plus tard)
+## 10. Mise en ligne (Netlify + Neon)
 
-```bash
-cd frontend && npm run build      # génère frontend/dist/
-cd backend  && mvn clean package  # génère backend/target/*.jar
+### Architecture
+
+```
+Netlify  ──  site React (statique)        https://nouali-car.netlify.app
+                     │  appels HTTPS (CORS)
+                     ▼
+Neon     ──  fonction API + Postgres      br-...-noualicar.compute.…neon.tech
 ```
 
-Il faudra alors :
-- remplacer `app.auth.secret` par une valeur secrète,
-- changer le mot de passe admin,
-- servir `frontend/dist/` derrière le même domaine que l'API (ou ajuster `app.cors.origins`).
+L'API tourne comme **fonction Neon**, a cote de la base. Neon y injecte
+`DATABASE_URL` automatiquement : **aucun mot de passe de base n'a a etre
+configure sur Netlify**. La cle de signature des sessions admin est generee et
+conservee dans la table `app_secrets`, donc elle non plus.
+
+Netlify ne sert que des fichiers statiques : il n'y a aucun secret dans ses
+reglages. La seule variable, `VITE_API_URL`, est l'adresse publique de l'API.
+
+### Le dossier `api/`
+
+| Fichier | Role |
+|---|---|
+| `index.js` | adaptateur Request/Response attendu par Neon, + CORS |
+| `router.js` | les 20 routes de l'API |
+| `_lib/db.js` | connexion Postgres et conversion base <-> JSON |
+| `_lib/auth.js` | jetons signes HMAC-SHA256, cle lue en base |
+| `scripts/setup-db.mjs` | cree le schema et les donnees de depart |
+| `scripts/smoke-test.mjs` | 31 tests contre la vraie base |
+
+### Deployer l'API
+
+```bash
+cd Location-Voiture/api && npm run deploy
+```
+
+(`neon functions deploy noualicar --src .`). L'adresse s'obtient avec
+`neon functions get noualicar`, champ `invocation_url`.
+
+### Deployer le site
+
+```bash
+cd Location-Voiture/frontend && npm run build
+```
+
+puis
+
+```bash
+npx netlify-cli deploy --prod --dir=dist
+```
+
+`netlify.toml` contient deja la commande de build, la redirection monopage et
+`VITE_API_URL`. **Attention : cette adresse est figee au moment du build** —
+si l'API change d'adresse, il faut reconstruire le site.
+
+### Verifier
+
+```bash
+cd Location-Voiture/api && npm test
+```
+
+Puis en ligne : `https://nouali-car.netlify.app/voitures` doit afficher les
+vehicules, et `/admin/login` accepter `admin`.
+
+**Changez le mot de passe admin des la premiere connexion.**
+
+### Ce qui reste a faire
+
+**Le televersement de photos ne fonctionne pas.** `POST /api/admin/upload`
+renvoie une erreur explicite : une fonction n'a pas de disque. En attendant,
+collez l'adresse d'une image dans le champ « Photo principale ». Brancher
+Neon Object Storage est la suite logique.
+
+**Le backend Spring Boot (`backend/`) n'est plus deploye.** Il reste utilisable
+en local, mais toute evolution de l'API doit se faire dans `api/`.

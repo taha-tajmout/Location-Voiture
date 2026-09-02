@@ -56,7 +56,7 @@ export default function Fleet({ type }) {
     type === 'MOTO'
       ? 'Scooters et roadsters disponibles a la location, casques inclus.'
       : type === 'CAR'
-        ? 'Citadines, berlines et SUV de la flotte Mehdi Luxury Cars.'
+        ? 'Citadines, berlines et SUV de la flotte Nouali Car.'
         : 'Voitures et motos disponibles a la location.'
 
   return (

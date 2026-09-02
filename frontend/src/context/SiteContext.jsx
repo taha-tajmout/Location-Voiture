@@ -4,13 +4,13 @@ import { api } from '../api/client.js'
 const SiteContext = createContext(null)
 
 const FALLBACK = {
-  siteName: 'Mehdi Luxury Cars',
-  phone1: '0661536755',
-  phone2: '0645424295',
+  siteName: 'Nouali Car',
+  phone1: '0681142747',
+  phone2: '',
   countryCode: '212',
-  whatsappMessage: 'Bonjour Mehdi Luxury Cars, je souhaite reserver un vehicule.',
-  heroTitle: "Louez l'exception",
-  heroSubtitle: 'Voitures et motos de luxe a la location.',
+  whatsappMessage: 'Bonjour Nouali Car, je souhaite reserver une voiture.',
+  heroTitle: 'Votre voiture a Taourirt',
+  heroSubtitle: 'Location de voitures a Taourirt, 24h/24. Reservation immediate par WhatsApp.',
 }
 
 /** Rend les parametres du site (numeros, reseaux, textes) disponibles partout. */

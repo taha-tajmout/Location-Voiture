@@ -149,7 +149,7 @@ export default function Home() {
             <div className="divider" />
             <span className="eyebrow">Pourquoi nous</span>
             <h2>
-              Le service <span className="gold-text">Mehdi</span>
+              Le service <span className="gold-text">Nouali</span>
             </h2>
           </div>
 
